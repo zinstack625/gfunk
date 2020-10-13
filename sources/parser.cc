@@ -1,5 +1,7 @@
 #include "parser.h"
 #include <string>
+#include <cctype>
+#include <cmath>
 
 Expression::Expression(std::string input) {
   function = input;
@@ -13,120 +15,141 @@ void Expression::parse() {
   }
 
   /* braces */
-  bool has_braces = 0;
-  int brace_pos = 0;
-  int brace_insertion = 0;
-  std::string func_name;
-  for (;;) {
-    brace_pos = function.find('(', brace_pos) == std::string::npos ?
-	        -1 : function.find('(', brace_pos);
-    if (brace_pos == -1) {
-	    break;
-    }
-    if (brace_pos > 3) {
-      func_name = function.substr(brace_pos - 4, 4);
-      /* check for function having braces not related to functions */
-      if (func_name.substr(1, 3) != "sin" && func_name.substr(1, 3) != "cos" &&
-          func_name.substr(1, 3) != "tan" && func_name.substr(1, 3) != "ctg" &&
-          func_name.substr(0, 3) != "log" && func_name.substr(2, 2) != "ln") 
-              has_braces = 1;
-    } else if (brace_pos == 3) {
-      func_name = function.substr(0, brace_pos - 1);
-      if (func_name.substr(0, 3) != "sin" && func_name.substr(0, 3) != "cos" &&
-          func_name.substr(0, 3) != "tan" && func_name.substr(0, 3) != "ctg" &&
-          func_name.substr(1, 2) != "ln") {
-              has_braces = 1;
-      }
-    } else if (brace_pos == 2) {
-      func_name = function.substr(0, brace_pos - 1);
-      if (func_name != "ln") {
-	      has_braces = 1;
-      }
-    } else {
-      has_braces = 1;
-    }
-    if (has_braces) {
-      Expression substring (function.substr(brace_pos + 1,
-                            function.find(')', brace_pos + 1) - brace_pos - 1));
-      function.erase(brace_pos, function.find(')', brace_pos) - brace_pos + 1);
-      function.insert(brace_pos, "$");
-      expressions.push_back(substring);
-    }
-    brace_pos++;
-    has_braces = 0;
+  int subexp_cnt = 0;
+  while (function.find('(', 0) != std::string::npos) {
+    int brace_pos = function.find('(', 0);  
+    Expression substring (function.substr(brace_pos + 1,
+                          function.find(')', brace_pos + 1) - brace_pos - 1));
+    function.replace(brace_pos, function.find(')', brace_pos) - brace_pos + 1,
+		    "$" + std::to_string(subexp_cnt));
+    expressions.push_back(substring);
+    subexp_cnt++;
   }
-  /* braces end */
   
   /* functions */
-  static const std::string functions[] =
-    { "sin", "cos", "tan", "ctg", "log", "ln" };
-  while (function.find("(", 0) != std::string::npos) {
-    int func_begin = function.find('(', 0) + 1;
-    int func_end = function.find(')', func_begin) - 1;
-    Expression substring (function.substr(func_begin, func_end - func_begin));
-    expressions.push_back(substring);
-    int i = 0;
-    for ( ; i < 5; i++) {
-      if (function.substr(func_begin - 4, func_begin - 1) == functions[i]) {
-        function.erase(func_begin - 4, func_end + 1);
-        break;
-      }
-    }
-    if (function.substr(func_begin - 3, func_begin - 1) == functions[5]) {
-      function.erase(func_begin - 3, func_end + 1);
-      i = 5;
-    }
-
-    function.insert(func_begin - 4, "&" + std::to_string(i));
-    
-  }
-  /* operations */
-/*  static const char keys[] = { '^', '*', '/', '+', '-' };
-  int string_position = 0;
-  /*enum operations {
-	  OP_POWER,
-	  OP_MULT,
-	  OP_DIV,
-	  OP_PLUS,
-	  OP_MINUS
-  };
+  const std::string functions[] =
+    { "sin", "cos", "tan", "ctg", "log" };
   for (int i = 0; i < 5; i++) {
-    if (function.find(keys[i], string_position) != std::string::npos) {
-      int cur_oper = function.find(keys[i], string_position);
-      int prev_oper = 0;
-      for (int j = cur_oper; j > 0; j--) {
-        if (function[j] == '^' || function[j] == '*' ||
-            function[j] == '/' || function[j] == '+' ||
-	    function[j] == '-') {
-          prev_oper = j;
-	  break;
-	}
-      }
-      int next_oper = 0;
-      for (int j = cur_oper; j < function.size(); j++) {
-        if (function[j] == '^' || function[j] == '*' ||
-            function[j] == '/' || function[j] == '+' ||
-	    function[j] == '-') {
-          next_oper = j;
-	  break;
-	}
-      }
-      Expression substring (function.substr(prev_oper + 1,
-                            next_oper - prev_oper - 1));
-      expressions.push_back(substring);
-      function.erase(prev_oper, next_oper - prev_oper - 1);
-      function.insert(prev_oper, "#" + std::to_string(i));
-    } else {
-      continue;
+    while (function.find(functions[i], 0) != std::string::npos) {
+      int func_begin = function.find(functions[i], 0);
+      function.replace(func_begin, 3, "&" + std::to_string(i) + "|");
     }
-  } */
+  }
 }
+
+bool Expression::is_calculated() {
+  for (char i : function) {
+    if (!isdigit(i)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+double Expression::get_value() {
+  return std::stod(function);
+}
+
 double Expression::calculate(int x) {
-  std::vector<double> subexp_values;
   std::string function_push = function;
-  int subop_cnt = 0;
-  while (function_push.find("$", 0))
-	  ;
-  return 0;
+  /* insert x */
+  while (function_push.find('x', 0) != std::string::npos) {
+    function_push.replace(function_push.find('x', 0), 1, std::to_string(x));
+  }
+  const char opers[] = { '^', '*', '/', '+', '-' };
+  for (char i : opers) {
+    while (function_push.find(i, 0) != std::string::npos) {
+      /* find the edges of subexpression */
+      size_t prev_oper = -1;
+      size_t cur_oper = function_push.find(i, 0);
+      size_t next_oper = function_push.size();
+      for (int j = cur_oper - 1; j > 0; j--) {
+          if (function_push[j] == '^' || function_push[j] == '*' ||
+              function_push[j] == '/' || function_push[j] == '+' ||
+              function_push[j] == '-') {
+            prev_oper = j;
+            break;
+          }
+      }
+      for (int j = cur_oper + 1; j < function_push.size(); j++) {
+        if (function_push[j] == '^' || function_push[j] == '*' ||
+            function_push[j] == '/' || function_push[j] == '+' ||
+            function_push[j] == '-') {
+          next_oper = j;
+          break;
+        }
+      }
+      std::string subexp = function_push.substr(
+          prev_oper + 1, next_oper - prev_oper - 1);
+      while (subexp.find('$', 0) != std::string::npos) {
+        size_t subexp_end = subexp.size() - 1;
+        size_t subexp_begin = subexp.find('$', 0);
+        int subexp_num = std::stoi(subexp.substr(subexp_begin + 1,
+          		      std::string::npos), &subexp_end);
+	double subexp_value = 0;
+	if (!expressions[subexp_num].is_calculated()) {
+          subexp_value = expressions[subexp_num].calculate(x);
+	} else {
+          subexp_value = expressions[subexp_num].get_value();
+	}
+        subexp.replace(subexp_begin,
+                 subexp_end + 1, std::to_string(subexp_value));
+      }
+      while (subexp.find('&', 0) != std::string::npos) {
+        size_t func_end = 0;
+        size_t func_begin = subexp.find('&', 0);
+        double func_value = 0;
+	size_t arg_end = 0;
+        int func_num = std::stoi(subexp.substr(func_begin + 1,
+          		      std::string::npos), &func_end);
+        double subexp_value = std::stod(subexp.substr(func_begin + func_end + 2,
+          		      std::string::npos), &arg_end);
+        switch (func_num) {
+          case 0:
+            func_value = sin(subexp_value);
+            break;
+          case 1:
+            func_value = cos(subexp_value);
+            break;
+          case 2:
+            func_value = tan(subexp_value);
+            break;
+          case 3:
+            func_value = tan(1 / subexp_value);
+            break;
+          case 4:
+            func_value = log(subexp_value);
+            break;
+        }
+        subexp.replace(func_begin, arg_end - func_begin + 1,
+			std::to_string(func_value));
+      }
+      size_t subexp_oper = 0;
+      double first = std::stod(subexp, &subexp_oper);
+      double second = std::stod(subexp.substr(subexp_oper + 1,
+			                      std::string::npos), nullptr);
+      double subexp_value = 0;
+      switch (i) {
+        case '^':
+	  subexp_value = pow(first, second);
+          break;
+	case '*':
+	  subexp_value = first * second;
+	  break;
+	case '/':
+	  subexp_value = first / second;
+	  break;
+	case '+':
+          subexp_value = first + second;
+	  break;
+	case '-':
+	  subexp_value = first - second;
+	  break;
+      }
+      subexp.replace(0, std::string::npos, std::to_string(subexp_value));
+      function_push.replace(prev_oper + 1, next_oper - 1, subexp);
+    }
+  }
+  return std::stod(function_push);
 }
 	  

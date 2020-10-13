@@ -2,13 +2,10 @@
 #include "parser.h"
 
 int main() {
-	Expression test ("(x^2) + 7 * sin(y)");
+	Expression test ("(x^2) + 7 * sin(x)");
 	std::cout << test.function << std::endl;
-	for (Expression i : test.expressions) {
-		std::cout << i.function << ' ';
-		for (char j : i.operations) {
-			std::cout << j << std::endl;
-		}
+	for (int i = -10; i < 10; i++) {
+		std::cout << test.calculate(i) << std::endl;
 	}
 }
 

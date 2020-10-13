@@ -8,8 +8,8 @@ class Expression {
 		Expression(std::string input);
 		std::vector<Expression> expressions;
 		std::vector<char> operations;
+		bool is_calculated();
+		double get_value();
 	private:
-		std::vector<int> order;
-		void linearize();
 		void parse();
 };
