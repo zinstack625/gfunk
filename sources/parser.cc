@@ -38,9 +38,17 @@ void Expression::parse() {
 }
 
 bool Expression::is_calculated() {
-  for (char i : function) {
-    if (!isdigit(i)) {
-      return false;
+  if (function[0] == '-') {
+    for (char i : function.substr(1)) {
+      if (!isdigit(i)) {
+        return false;
+      }
+    }
+  } else {
+    for (char i : function) {
+      if (!isdigit(i)) {
+        return false;
+      }
     }
   }
   return true;
@@ -58,20 +66,28 @@ double Expression::calculate(int x) {
   }
   const char opers[] = { '^', '*', '/', '+', '-' };
   for (char i : opers) {
-    while (function_push.find(i, 0) != std::string::npos) {
+    while (function_push.find(i, 1) != std::string::npos) {
       /* find the edges of subexpression */
       size_t prev_oper = -1;
-      size_t cur_oper = function_push.find(i, 0);
+      size_t cur_oper = function_push.find(i, 1);
       size_t next_oper = function_push.size();
-      for (int j = cur_oper - 1; j > 0; j--) {
-          if (function_push[j] == '^' || function_push[j] == '*' ||
-              function_push[j] == '/' || function_push[j] == '+' ||
-              function_push[j] == '-') {
-            prev_oper = j;
-            break;
+      for (int j = cur_oper - 2; j > 0; j--) {
+	  char am = function_push[j - 1];
+	  switch (function_push[j]) {
+            case '-':
+	      if (am == '*' || am == '/' || am == '+' || am == '-') {
+                prev_oper = j - 1;
+		break;
+	      }
+            case '^':
+	    case '*':
+	    case '/':
+	    case '+':
+              prev_oper = j;
+              break;
           }
       }
-      for (int j = cur_oper + 1; j < function_push.size(); j++) {
+      for (int j = cur_oper + 2; j < function_push.size(); j++) {
         if (function_push[j] == '^' || function_push[j] == '*' ||
             function_push[j] == '/' || function_push[j] == '+' ||
             function_push[j] == '-') {
