@@ -3,7 +3,7 @@
 #include <cctype>
 #include <cmath>
 
-Expression::Expression(std::string input) {
+Expression::Expression(const std::string& input) {
   function = input;
   parse();
 }
@@ -168,4 +168,8 @@ double Expression::calculate(int x) {
   }
   return std::stod(function_push);
 }
-	  
+
+void Expression::set_function(const std::string& input) {
+	function = input;
+	parse();
+}
