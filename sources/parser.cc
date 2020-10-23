@@ -7,6 +7,8 @@ Expression::Expression(const std::string& input) {
   function = input;
   parse();
 }
+Expression::Expression() {
+}
 
 void Expression::parse() {
   /* remove spaces */
@@ -58,11 +60,14 @@ double Expression::get_value() {
   return std::stod(function);
 }
 
-double Expression::calculate(int x) {
+double Expression::calculate(double x, double y) {
   std::string function_push = function;
-  /* insert x */
+  /* insert x and y*/
   while (function_push.find('x', 0) != std::string::npos) {
     function_push.replace(function_push.find('x', 0), 1, std::to_string(x));
+  }
+  while (function_push.find('y', 0) != std::string::npos) {
+    function_push.replace(function_push.find('y', 0), 1, std::to_string(y));
   }
   const char opers[] = { '^', '*', '/', '+', '-' };
   for (char i : opers) {
@@ -104,7 +109,7 @@ double Expression::calculate(int x) {
           		      std::string::npos), &subexp_end);
 	double subexp_value = 0;
 	if (!expressions[subexp_num].is_calculated()) {
-          subexp_value = expressions[subexp_num].calculate(x);
+          subexp_value = expressions[subexp_num].calculate(x, y);
 	} else {
           subexp_value = expressions[subexp_num].get_value();
 	}

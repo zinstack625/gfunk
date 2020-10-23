@@ -2,21 +2,36 @@
 #include "gtkmm/builder.h"
 #include "gtkmm/editable.h"
 #include "gtkmm/entry.h"
+#include "gtkmm/glarea.h"
 #include "gtkmm/widget.h"
 #include "gtkmm/window.h"
 #include "gtkmm/windowgroup.h"
 #include "parser.h"
+#include "rangeparser.h"
 #include "sigc++/functors/ptr_fun.h"
+#include <cstdlib>
 #include <gtkmm.h>
 #include <iostream>
+#include <utility>
 
-Expression function("");
-
-void on_FunctionInput_changed(Gtk::Entry *FunctionInput) {
-  function.set_function(FunctionInput->get_text());
+void on_FunctionInput_changed(const Gtk::Entry *FunctionInput,
+                              Expression *function) {
+  function->set_function(FunctionInput->get_text());
+}
+void on_RangeInput_changed(const Gtk::Entry *RangeInput,
+                           std::pair<double, double> *range) {
+  *range = rangeparser(RangeInput->get_text());
 }
 
+struct Ranges {
+  std::pair<double, double> xrange;
+  std::pair<double, double> yrange;
+  std::pair<double, double> zrange;
+};
+
 int main(int argc, char *argv[]) {
+  Expression function;
+  Ranges func_ranges = {{0, 0}, {0, 0}, {0, 0}};
   auto app = Gtk::Application::create(argc, argv, "GFunk Calculator");
   auto builder = Gtk::Builder::create();
   try {
@@ -37,27 +52,45 @@ int main(int argc, char *argv[]) {
     Gtk::Widget *InputBox = nullptr;
     Gtk::Entry *FunctionInput = nullptr;
     Gtk::Widget *VariableInput = nullptr;
-    Gtk::Widget *XInput = nullptr;
-    Gtk::Widget *FunctionOutput = nullptr;
+    Gtk::Entry *XInput = nullptr;
+    Gtk::Entry *YInput = nullptr;
+    Gtk::Entry *ZInput = nullptr;
+    Gtk::GLArea *FunctionOutput = nullptr;
     builder->get_widget("CentralDivider", CentralDivider);
     if (CentralDivider) {
       builder->get_widget("InputBox", InputBox);
       if (InputBox) {
         builder->get_widget("FunctionInput", FunctionInput);
         if (FunctionInput) {
-          FunctionInput->set_text("x^3");
-          FunctionInput->signal_changed().connect(sigc::bind<Gtk::Entry *>(
-              sigc::ptr_fun(&on_FunctionInput_changed), FunctionInput));
-          std::cout << FunctionInput->get_text() << std::endl;
+          FunctionInput->signal_changed().connect(
+              sigc::bind<Gtk::Entry*, Expression*>(sigc::ptr_fun(&on_FunctionInput_changed),
+                                       FunctionInput, &function));
         }
         builder->get_widget("VariableInput", VariableInput);
         if (VariableInput) {
-          // Too lazy
+          builder->get_widget("XInput", XInput);
+          if (XInput) {
+            XInput->signal_changed().connect(
+                sigc::bind<Gtk::Entry*, std::pair<double, double>*>(sigc::ptr_fun(&on_RangeInput_changed),
+                                         XInput, &func_ranges.xrange));
+          }
+          builder->get_widget("YInput", YInput);
+          if (YInput) {
+            YInput->signal_changed().connect(
+                sigc::bind<Gtk::Entry*, std::pair<double, double>*>(sigc::ptr_fun(&on_RangeInput_changed),
+                                         YInput, &func_ranges.yrange));
+          }
+          builder->get_widget("ZInput", ZInput);
+          if (ZInput) {
+            ZInput->signal_changed().connect(
+                sigc::bind<Gtk::Entry*, std::pair<double, double>*>(sigc::ptr_fun(&on_RangeInput_changed),
+                                         ZInput, &func_ranges.zrange));
+          }
         }
       }
       builder->get_widget("FunctionOutput", FunctionOutput);
       if (FunctionOutput) {
-        // Connect signals
+        // TODO: Connect signals and make GL routine
       }
     }
     app->run(*MainWindow);

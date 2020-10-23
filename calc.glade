@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="MainWindow">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkBox" id="CentralDivider">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="spacing">1</property>
         <child>
           <object class="GtkBox" id="InputBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">123</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">123</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkEntry" id="FunctionInput">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="placeholder_text" translatable="yes">Please input desired function here: e.g. "(x^3)*sin(80x)</property>
+                <property name="can-focus">True</property>
+                <property name="placeholder-text" translatable="yes">Please input desired function here: e.g. "(x^3)*sin(80x)</property>
                 <signal name="changed" handler="on_FunctionInput_changed" swapped="no"/>
               </object>
               <packing>
@@ -29,74 +29,75 @@
               </packing>
             </child>
             <child>
+              <!-- n-columns=2 n-rows=3 -->
               <object class="GtkGrid" id="VariableInput">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">2</property>
                 <child>
                   <object class="GtkEntry" id="XInput">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="placeholder_text" translatable="yes">Please input desired function here: e.g. "(x^3)*sin(80x)</property>
+                    <property name="can-focus">True</property>
+                    <property name="placeholder-text" translatable="yes">Please input range: e.g. [-10, 10]</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="YInput">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="placeholder_text" translatable="yes">Please input desired function here: e.g. "(x^3)*sin(80x)</property>
+                    <property name="can-focus">True</property>
+                    <property name="placeholder-text" translatable="yes">Please input range: e.g. [-10, 10]</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="ZInput">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="placeholder_text" translatable="yes">Please input desired function here: e.g. "(x^3)*sin(80x)</property>
+                    <property name="can-focus">True</property>
+                    <property name="placeholder-text" translatable="yes">Please input range: e.g. [-10, 10]</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="XWarn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">X in range</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="YWarn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Y in range</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="ZWarn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Z in range</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
               </object>
@@ -108,14 +109,15 @@
             </child>
             <child>
               <object class="GtkButton" id="CalculateButton">
-                <property name="label" translatable="yes">button</property>
+                <property name="label">gtk-yes</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -127,12 +129,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="FunctionOutput">
+          <object class="GtkGLArea" id="FunctionOutput">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="app-paintable">True</property>
+            <property name="can-focus">False</property>
+            <property name="has-alpha">True</property>
+            <property name="has-depth-buffer">True</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -142,66 +147,66 @@
     <child type="titlebar">
       <object class="GtkMenuBar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkMenuItem">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">_File</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
             <child type="submenu">
               <object class="GtkMenu">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-new</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-open</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-save</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-save-as</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkSeparatorMenuItem">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-quit</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
               </object>
@@ -211,47 +216,47 @@
         <child>
           <object class="GtkMenuItem">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">_Edit</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
             <child type="submenu">
               <object class="GtkMenu">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-cut</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-copy</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-paste</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-delete</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
               </object>
@@ -261,28 +266,28 @@
         <child>
           <object class="GtkMenuItem">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">_View</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
           </object>
         </child>
         <child>
           <object class="GtkMenuItem">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">_Help</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
             <child type="submenu">
               <object class="GtkMenu">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkImageMenuItem">
                     <property name="label">gtk-about</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="use-stock">True</property>
                   </object>
                 </child>
               </object>
